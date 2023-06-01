@@ -5,6 +5,9 @@
 # ссылка на телеграмм бота:
 # https://t.me/smart_cup_bot
 
+# Не использовать ' и " при ответах
+# Если будите запускать код повторно, то закоментируйте файл "Создание таблицы для юзеров" от 'Начало' до 'Конец'
+
 
 import telebot
 from googletrans import Translator
@@ -41,22 +44,19 @@ h = False
 all_txt = sqlite3.connect('all_text.db', check_same_thread=False)
 c = all_txt.cursor()
 # Создание таблицы для юзеров
-# try:
-# c.execute("""CREATE TABLE all_txt(
-#     user_name text,
-#     txt text,
-#     like integer,
-#     comment text,
-#     id integer
-# )""")
-# c.execute("""CREATE TABLE lego(
-#     name text,
-#     txt text,
-#     ques text,
-#     m integer
-# )""")
-# except sqlite3.OperationalError:
-#     ...
+# Начало
+try:
+    c.execute("""CREATE TABLE all_txt(
+        user_name text,
+        txt text,
+        like integer,
+        comment text,
+        id integer
+    )""")
+
+except sqlite3.OperationalError:
+    ...
+#Конец
 all_txt.commit()
 
 
@@ -115,7 +115,6 @@ country and helped everyone who needed his help."""
         all_txt.commit()
 
         c.execute("SELECT * FROM all_txt")
-        print(c.fetchall())
 
         bot.send_message(message.chat.id, textr)
         status1 = 0
@@ -127,7 +126,7 @@ country and helped everyone who needed his help."""
         show = types.KeyboardButton('Recent published stories')
         # lego = types.KeyboardButton('Story builder')
         # story = types.KeyboardButton('Other stories')
-        markup.add(hero, car, show, lego)
+        markup.add(hero, car, show)
         bot.send_message(message.chat.id, 'Who will your next story be about???', reply_markup=markup)
 
     if len(ans_t2) == 4 and status1 == -1:
@@ -166,7 +165,6 @@ cars to stay on top of the sports world."""
         all_txt.commit()
 
         c.execute("SELECT * FROM all_txt")
-        print(c.fetchall())
 
         bot.send_message(message.chat.id, textr)
         status1 = 0
@@ -177,7 +175,7 @@ cars to stay on top of the sports world."""
         car = types.KeyboardButton('Programmer in a sports car')
         show = types.KeyboardButton('Recent published stories')
         # story = types.KeyboardButton('Other stories')
-        markup.add(hero, car, show, lego, tr)
+        markup.add(hero, car, show)
         bot.send_message(message.chat.id, 'Who will your next story be about???', reply_markup=markup)
 
     if message.text is not None and status1 == 1 and message.text != 'Hero of the tribe' and message.text != 'Programmer in a sports car':
@@ -305,7 +303,6 @@ cars to stay on top of the sports world."""
         for i in c.fetchall():
             q = [i[0], i[1], i[2], i[3], i[4], i[5]]
             new_list.append(q)
-        print(new_list, '\n\n\n\n\n\n\n\n\n\n')
         status2 = 'show'
         all_txt.commit()
 
@@ -324,7 +321,6 @@ cars to stay on top of the sports world."""
         # print(c.fetchall())
 
         # li = 
-        print(new_list, '\n\n')
         bot.send_message(message.chat.id, f"{new_list[-1][0]}", reply_markup=markup)
         bot.send_message(message.chat.id, f"{new_list[-1][1]}")
         bot.send_message(message.chat.id, f"Like: {new_list[-1][2]}")
